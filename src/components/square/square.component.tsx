@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo, useState } from 'react';
 
 import { InputType } from '../../types';
 import { SquareButton } from './square.styles';
@@ -10,11 +10,18 @@ interface SquareProps {
 }
 
 const Square: FC<SquareProps> = ({ input, idx, makeMove }) => {
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const handleInput = () => {
     makeMove(idx);
+    setIsButtonDisabled(true);
   };
 
-  return <SquareButton onClick={handleInput}>{input}</SquareButton>;
+  return (
+    <SquareButton onClick={handleInput} disabled={isButtonDisabled}>
+      {input}
+    </SquareButton>
+  );
 };
 
-export default Square;
+export default memo(Square);

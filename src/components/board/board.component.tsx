@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { InputType } from '../../types';
 
@@ -20,30 +20,31 @@ const Board: FC = () => {
     }
   }, [isXnext]);
 
-  useEffect(() => {
-    const calculateWinner = (): InputType => {
-      const winningLines = [
-        [0, 1, 2],
-        [0, 3, 6],
-        [0, 4, 8],
-        [1, 4, 7],
-        [2, 4, 6],
-        [2, 5, 8],
-        [3, 4, 5],
-        [6, 7, 8],
-      ];
+  const calculateWinner = useCallback((): InputType => {
+    const winningLines = [
+      [0, 1, 2],
+      [0, 3, 6],
+      [0, 4, 8],
+      [1, 4, 7],
+      [2, 4, 6],
+      [2, 5, 8],
+      [3, 4, 5],
+      [6, 7, 8],
+    ];
 
-      for (let i = 0; i < winningLines.length; i++) {
-        const [a, b, c] = winningLines[i];
+    for (let i = 0; i < winningLines.length; i++) {
+      const [a, b, c] = winningLines[i];
 
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-          return squares[a];
-        }
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
       }
-      return null;
-    };
-    setWinner(calculateWinner());
+    }
+    return null;
   }, [squares]);
+
+  useEffect(() => {
+    setWinner(calculateWinner());
+  }, [squares, calculateWinner]);
 
   const newGame = () => {
     setSquares(Array(9).fill(null));
